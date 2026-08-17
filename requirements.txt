@@ -1,0 +1,26 @@
+# --- API + UI --------------------------------------------------------------
+fastapi==0.141.1
+uvicorn[standard]>=0.30
+streamlit>=1.38
+httpx>=0.27
+python-dotenv>=1.0
+pydantic>=2.7
+
+# --- Retrieval -------------------------------------------------------------
+faiss-cpu>=1.8            # vector index
+scikit-learn>=1.5         # local TF-IDF + LSA embedding backend (no network)
+numpy>=1.26
+
+# --- LLM -------------------------------------------------------------------
+openai>=1.40
+
+# --- Healthcare interoperability -------------------------------------------
+fhir.resources>=8.0       # FHIR R4B resource models with validation
+
+# --- Persistence -----------------------------------------------------------
+SQLAlchemy>=2.0
+psycopg2-binary>=2.9      # Postgres driver (docker-compose); SQLite used locally
+
+# --- Tooling ---------------------------------------------------------------
+pytest>=8.0
+ruff>=0.6

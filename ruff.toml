@@ -1,0 +1,13 @@
+line-length = 100
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "SIM", "RUF", "PIE", "DTZ", "BLE"]
+
+[lint.per-file-ignores]
+# Index loading falls back to a rebuild on ANY read failure (corrupt, stale,
+# version-mismatched); enumerating those exception types buys nothing.
+"app/rag/index.py" = ["BLE001"]
+# The prompt contains a JSON schema on one line on purpose: wrapping it would
+# insert newlines into the exact shape the model is instructed to return.
+"app/analyze.py" = ["E501"]

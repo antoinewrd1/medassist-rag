@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: medassist
+      POSTGRES_DB: medassist
+    healthcheck:
+      # The API waits for a real readiness signal, not a fixed sleep.
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      MA_DB_URL: postgresql://postgres:medassist@db:5432/medassist
+      MA_LLM_BACKEND: ${MA_LLM_BACKEND:-fake}
+      MA_EMBED_BACKEND: ${MA_EMBED_BACKEND:-local}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  ui:
+    build: .
+    command: streamlit run ui/streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    environment:
+      MA_API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
